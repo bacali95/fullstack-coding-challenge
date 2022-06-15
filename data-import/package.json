@@ -1,0 +1,19 @@
+{
+  "name": "data-import",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "schema:deploy": "yarn prisma migrate deploy",
+    "schema:generate": "yarn prisma generate",
+    "seed": "ts-node seed.ts"
+  },
+  "devDependencies": {
+    "@prisma/client": "^3.15.2",
+    "@types/node": "16.11.7",
+    "@types/uuid": "^8.3.4",
+    "prisma": "^3.15.2",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.3",
+    "uuid": "^8.3.2"
+  }
+}

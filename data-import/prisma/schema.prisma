@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Accommodation {
+  id            String            @id
+  names         TextTranslation[]
+  namesFallback String
+  review        Review[]
+}
+
+model Review {
+  id                String               @id
+  titles            TextTranslation[]    @relation("titlesTranslations")
+  texts             TextTranslation[]    @relation("textsTranslations")
+  locale            String
+  entryDate         DateTime
+  updatedDate       DateTime
+  traveledWith      String
+  travelDate        DateTime
+  generalRating     Int?
+  aspectsRatingsId  String               @unique
+  aspectRatings     ReviewAspectsRatings @relation(fields: [aspectsRatingsId], references: [id])
+  originalUserName  String
+  originalUserEmail String
+  statusId          String               @unique
+  status            ReviewStatus         @relation(fields: [statusId], references: [id])
+  accommodationId   String?
+  accommodation     Accommodation?       @relation(fields: [accommodationId], references: [id])
+}
+
+model ReviewAspectsRatings {
+  id              String  @id
+  location        Int?
+  service         Int?
+  priceQuality    Int?
+  food            Int?
+  room            Int?
+  childFriendly   Int?
+  interior        Int?
+  size            Int?
+  activities      Int?
+  restaurants     Int?
+  sanitaryState   Int?
+  accessibility   Int?
+  nightlife       Int?
+  culture         Int?
+  surrounding     Int?
+  atmosphere      Int?
+  noviceSkiArea   Int?
+  advancedSkiArea Int?
+  apresSki        Int?
+  beach           Int?
+  entertainment   Int?
+  environmental   Int?
+  pool            Int?
+  terrace         Int?
+  housing         Int?
+  hygiene         Int?
+  review          Review?
+}
+
+model ReviewStatus {
+  id        String  @id
+  published Boolean
+  checked   Boolean
+  reason    String
+  review    Review?
+}
+
+model TextTranslation {
+  id              String         @id
+  locale          String
+  payload         String
+  reviewTitleId   String?
+  reviewTitle     Review?        @relation("titlesTranslations", fields: [reviewTitleId], references: [id])
+  reviewTextId    String?
+  reviewText      Review?        @relation("textsTranslations", fields: [reviewTextId], references: [id])
+  accommodationId String?
+  accommodation   Accommodation? @relation(fields: [accommodationId], references: [id])
+}
