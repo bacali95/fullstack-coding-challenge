@@ -16,7 +16,7 @@ def map_review_to_dto(item):
         "traveledWith": item[5],
         "travelDate": int(item[6].timestamp() * 1000),
         "userName": item[7],
-        "rating": {
+        "ratings": {
             "general": item[8],
             "aspects": {
                 "location": item[10],

@@ -30,7 +30,6 @@ def accommodations():
     db_cursor = db_connection.cursor()
     db_cursor.execute(ACCOMMODATIONS_QUERY)
     data = db_cursor.fetchall()
-    print(data)
 
     return jsonify([map_accommodation_to_dto(item) for item in data])
 
