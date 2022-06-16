@@ -1,28 +1,41 @@
-var express = require('express');
-var _ = require('underscore');
-var router = express.Router();
+const express = require("express");
+const _ = require("underscore");
+const router = express.Router();
 
-var util = require('../_util');
+const { getAverageRatings, getAverageTravelledWith } = require("../_util");
+const { dataSourceConnector } = require("../connectors/data-service");
 
-router.get('/:accommodationId', function (req, res) {
+router.get("/:accommodationId", async function (req, res) {
+  const reviews = await dataSourceConnector.getAccommodationReviews(
+    req.params.accommodationId
+  );
 
-  const reviews = []; // Insert logic to load the reviews from the data service
+  if (!reviews) {
+    return res.status(404).end();
+  }
 
-  let { start = 1, limit, filterBy, sortBy = 'entryDate' } = req.query;
-  let data = _.sortBy(reviews, sortBy).reverse(); // reverse to sort desc
-  let filtered = data.filter((review) =>
+  const { page = "0", limit = 10, filterBy, sortBy = "entryDate" } = req.query;
+  const filtered = reviews.filter((review) =>
     filterBy ? review.traveledWith === filterBy : true
   );
-  let paginated = filtered.slice(start - 1, limit);
-  res.json({ all: data, filtered: filtered, limited: paginated });
+  const sorted = _.sortBy(filtered, sortBy).reverse(); // reverse to sort desc
+  const paginated = sorted.slice(+page * limit, (+page + 1) * limit);
+
+  res.json({ data: paginated, total: filtered.length, page: +page });
 });
 
-router.get('/average/:accommodationId', function (req, res) {
-  const reviews = []; // Insert logic to load the reviews from the data service
+router.get("/average/:accommodationId", async function (req, res) {
+  const reviews = await dataSourceConnector.getAccommodationReviews(
+    req.params.accommodationId
+  );
 
-  let { generalAvg, aspecsAvg } = util.getAverageRatings(reviews);
-  let traveledWithAvg = util.getAverageTravelledWith(reviews);
-  res.json({ generalAvg, aspecsAvg, traveledWithAvg });
+  if (!reviews) {
+    return res.status(404).end();
+  }
+
+  let { generalAvg, aspectsAvg } = getAverageRatings(reviews);
+  let traveledWithAvg = getAverageTravelledWith(reviews);
+  res.json({ generalAvg, aspectsAvg, traveledWithAvg });
 });
 
 module.exports = router;
