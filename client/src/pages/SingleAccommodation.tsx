@@ -8,6 +8,7 @@ import { ReviewsFilters } from "../components/ReviewsFilters";
 import { TraveledWithPercentages } from "../components/TraveledWithPercentages";
 import { AverageRatings } from "../components/AverageRatings";
 import { Spinner } from "../components/Spinner";
+import { ErrorMessage } from "../components/ErrorMessage";
 
 export const SingleAccommodation: FC = () => {
   const { id } = useParams();
@@ -22,6 +23,7 @@ export const SingleAccommodation: FC = () => {
     aspectsAvg: Record<keyof AccommodationReview["ratings"]["aspects"], string>;
     traveledWithAvg: Record<string, string>;
   }>();
+  const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(0);
   const [filterBy, setFilterBy] = useState<string>("");
@@ -30,13 +32,14 @@ export const SingleAccommodation: FC = () => {
   useEffect(() => {
     const abortController = new AbortController();
 
-    request(`/api/accommodations/${id}`, abortController.signal).then(
-      setAccommodation
-    );
-
-    request(`/api/reviews/average/${id}`, abortController.signal).then(
-      setAverageReviews
-    );
+    Promise.all([
+      request(`/api/accommodations/${id}`, abortController.signal).then(
+        setAccommodation
+      ),
+      request(`/api/reviews/average/${id}`, abortController.signal).then(
+        setAverageReviews
+      ),
+    ]).catch(() => setError(true));
 
     return () => abortController.abort();
   }, [id]);
@@ -67,37 +70,49 @@ export const SingleAccommodation: FC = () => {
 
   return (
     <div className="flex flex-col gap-4 mx-auto md:max-w-6xl p-4">
-      <div className="flex justify-between items-center my-10">
-        <h1 className="text-4xl">{accommodation?.name}</h1>
-        <div className="relative h-20 w-20 flex items-center justify-center text-white">
-          <HiStar className="-z-10 absolute inset-0 h-20 w-20 text-amber-500" />
-          {averageReviews ? averageReviews.generalAvg : <Spinner />}
-        </div>
-      </div>
-      {averageReviews ? (
-        <div className="flex flex-col mb-6 gap-4">
-          <AverageRatings aspectsAvg={averageReviews.aspectsAvg} />
-          <TraveledWithPercentages
-            traveledWithAvg={averageReviews.traveledWithAvg}
-          />
-        </div>
+      {error ? (
+        <ErrorMessage />
       ) : (
-        <Spinner />
-      )}
-      <div className="relative">
-        {loading && (
-          <div className="absolute bg-gray-200 inset-0 bg-opacity-50">
-            <Spinner />
+        <>
+          <div className="flex justify-between items-center my-10">
+            <h1 className="text-4xl">{accommodation?.name}</h1>
+            <div className="relative h-20 w-20 flex items-center justify-center text-white">
+              <HiStar className="-z-10 absolute inset-0 h-20 w-20 text-amber-500" />
+              {averageReviews ? averageReviews.generalAvg : <Spinner />}
+            </div>
           </div>
-        )}
-        <ReviewsFilters
-          sortBy={sortBy}
-          travelWithOptions={Object.keys(averageReviews?.traveledWithAvg ?? {})}
-          onFilterByChange={handleFilterByChange}
-          onSortByChange={handleSortByChange}
-        />
-        {reviews && <ReviewsList {...reviews} setPage={setPage} />}
-      </div>
+          {averageReviews ? (
+            <div className="flex flex-col mb-6 gap-4">
+              <AverageRatings aspectsAvg={averageReviews.aspectsAvg} />
+              <TraveledWithPercentages
+                traveledWithAvg={averageReviews.traveledWithAvg}
+              />
+            </div>
+          ) : (
+            <Spinner />
+          )}
+          <div className="relative">
+            {loading && (
+              <div className="absolute bg-gray-200 inset-0 bg-opacity-50">
+                <Spinner />
+              </div>
+            )}
+            {reviews && (
+              <>
+                <ReviewsFilters
+                  sortBy={sortBy}
+                  travelWithOptions={Object.keys(
+                    averageReviews?.traveledWithAvg ?? {}
+                  )}
+                  onFilterByChange={handleFilterByChange}
+                  onSortByChange={handleSortByChange}
+                />
+                <ReviewsList {...reviews} setPage={setPage} />
+              </>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 };
