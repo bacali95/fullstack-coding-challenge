@@ -8,7 +8,7 @@
     "data-import"
   ],
   "scripts": {
-    "seed:data-import": "lerna run seed --scope data-import",
+    "data-import:seed": "lerna run seed --scope data-import",
     "start:server": "lerna run start --scope server --stream",
     "start:client": "lerna run start --scope client --stream",
     "start": "lerna run start --parallel --scope server --scope client --stream"

@@ -5,7 +5,7 @@
   "scripts": {
     "schema:deploy": "yarn prisma migrate deploy",
     "schema:generate": "yarn prisma generate",
-    "seed": "ts-node seed.ts"
+    "seed": "yarn schema:deploy && ts-node seed.ts"
   },
   "devDependencies": {
     "@prisma/client": "^3.15.2",

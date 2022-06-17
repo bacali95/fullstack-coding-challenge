@@ -1,13 +1,21 @@
+from dotenv import load_dotenv
 from flask import Flask, abort, jsonify
 import psycopg2
+import os
 
 from helpers import map_accommodation_to_dto, map_review_to_dto
 
+load_dotenv()
 
 app = Flask(__name__)
 
-db_connection = psycopg2.connect(
-    "host=localhost dbname=zoover user=zoover password=zoover")
+db_connection = psycopg2.connect(f"""
+    host={os.getenv('DATABASE_HOST')}
+    port={os.getenv('DATABASE_PORT')}
+    dbname={os.getenv('DATABASE_NAME')}
+    user={os.getenv('DATABASE_USER')}
+    password={os.getenv('DATABASE_PASSWORD')}
+""")
 
 ACCOMMODATIONS_QUERY = """
 SELECT "acc"."id", "names"."payload", "acc"."namesFallback" FROM "Accommodation" AS "acc" 
@@ -92,4 +100,4 @@ def page_not_found(error):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host="0.0.0.0", port=os.getenv("PORT", 5000))

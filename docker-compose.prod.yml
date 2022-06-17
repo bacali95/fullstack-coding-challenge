@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+  data-service:
+    build:
+      dockerfile: docker/data-service.Dockerfile
+      context: .
+    environment:
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DATABASE_NAME: zoover
+      DATABASE_USER: zoover
+      DATABASE_PASSWORD: zoover
+    ports:
+      - '5000:5000'
+    depends_on:
+      - db
+
+  app:
+    build:
+      dockerfile: docker/app.Dockerfile
+      context: .
+    environment:
+      PORT: 3000
+      DATA_SERVICE_URL: "http://data-service:5000"
+    ports:
+      - '3000:3000'
+    depends_on:
+      - data-service
+
+  db:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_DB: zoover
+      POSTGRES_USER: zoover
+      POSTGRES_PASSWORD: zoover
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - '8888:8080'
+
+volumes:
+  db-data:

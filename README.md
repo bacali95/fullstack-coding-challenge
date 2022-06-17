@@ -1,5 +1,22 @@
 # Zoover FullStack assessment
 
+## How to run
+
+### Seed data to database
+1. Run `yarn install` to install all dependencies,
+2. Run `docker-compose up -d` to start the Postgres database service,
+2. Seed the data to the database using `yarn data-import:seed`,
+
+### Run services from source
+1. Run `cd data-service && python main.py` to start the python data service,
+2. In a separate terminal run `yarn start` to spin up both the NodeJs server and the ReactJs client dev server,
+3. Open `http://localhost:3000` in the browser.
+
+### Run services using production docker images
+1. Run `docker-compose -f docker-compose.prod.yml build` to build the images,
+2. Run `docker-compose -f docker-compose.prod.yml up` to start all required services,
+3. Open `http://localhost:3000` in the browser.
+
 ## Requirements
 
 This is an assignment that requires setting up a database and import data, create a REST api server and creating a good web UI visual performing a set of mathematical calculations and a web UI for visualization. A ready server that returns a collection of reviews for one single accommodation is provided and this acco page needs to be implemented.

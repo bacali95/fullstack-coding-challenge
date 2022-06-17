@@ -1,7 +1,10 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as uuid from "uuid";
+import * as dotenv from "dotenv";
 import { PrismaClient } from "@prisma/client";
+
+dotenv.config();
 
 const prisma = new PrismaClient();
 
