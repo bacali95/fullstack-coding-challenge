@@ -23,13 +23,14 @@ LEFT JOIN "TextTranslation" AS "names" ON "acc"."id" = "names"."accommodationId"
 """
 REVIEWS_QUERY = """
 SELECT 
-    "rev"."id", "titles"."payload", "texts"."payload", "rev"."entryDate", "rev"."updatedDate",
+    "rev"."id", "titles"."payload", "texts"."payload", "rev"."entryDate", "status"."published",
     "rev"."traveledWith", "rev"."travelDate", "rev"."originalUserName", "rev"."generalRating", "aspectsRatings".*
 FROM "Review" AS "rev" 
 LEFT JOIN "Accommodation" AS "acc" ON "acc"."id" = "rev"."accommodationId"
 LEFT JOIN "TextTranslation" AS "titles" ON "titles"."reviewTitleId" = "rev"."id" AND "titles"."locale" = "rev"."locale"
 LEFT JOIN "TextTranslation" AS "texts" ON "texts"."reviewTextId" = "rev"."id" AND "texts"."locale" = "rev"."locale"
 LEFT JOIN "ReviewAspectsRatings" AS "aspectsRatings" ON "aspectsRatings"."id" = "rev"."aspectsRatingsId"
+LEFT JOIN "ReviewStatus" AS "status" ON "status"."id" = "rev"."statusId"
 """
 
 

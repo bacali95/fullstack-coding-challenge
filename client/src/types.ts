@@ -12,7 +12,6 @@ export interface AccommodationReview {
   traveledWith: string;
   userName: string;
   entryDate: number;
-  updatedDate: number;
   ratings: {
     general: number | null;
     aspects: {

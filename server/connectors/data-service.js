@@ -36,7 +36,7 @@ class DataService {
         { baseURL: this.endpoint }
       );
 
-      return response.data;
+      return response.data.filter((review) => review.status);
     } catch (e) {
       console.error(e.message);
       return undefined;

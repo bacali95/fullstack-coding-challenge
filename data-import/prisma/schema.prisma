@@ -23,14 +23,12 @@ model Review {
   texts             TextTranslation[]    @relation("textsTranslations")
   locale            String
   entryDate         DateTime
-  updatedDate       DateTime
   traveledWith      String
   travelDate        DateTime
   generalRating     Int?
   aspectsRatingsId  String               @unique
   aspectRatings     ReviewAspectsRatings @relation(fields: [aspectsRatingsId], references: [id])
   originalUserName  String
-  originalUserEmail String
   statusId          String               @unique
   status            ReviewStatus         @relation(fields: [statusId], references: [id])
   accommodationId   String?

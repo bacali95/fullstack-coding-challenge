@@ -12,7 +12,7 @@ def map_review_to_dto(item):
         "title": item[1],
         "text": item[2],
         "entryDate": int(item[3].timestamp() * 1000),
-        "updatedDate": int(item[4].timestamp() * 1000),
+        "status": item[4],
         "traveledWith": item[5],
         "travelDate": int(item[6].timestamp() * 1000),
         "userName": item[7],
