@@ -6,12 +6,22 @@ type Props = {
 
 export const TraveledWithPercentages: FC<Props> = ({ traveledWithAvg }) => {
   return (
-    <div className="flex flex-col gap-4">
+    <div
+      className="flex flex-col gap-4"
+      data-testid="accommodation-traveled-with"
+    >
       <h2 className="text-2xl">The percentages of travelledWith</h2>
       <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
         {Object.entries(traveledWithAvg).map(([aspectKey, aspectValue]) => (
-          <div key={aspectKey} className="flex flex-col gap-2">
-            <span className="text-sm">
+          <div
+            key={aspectKey}
+            className="flex flex-col gap-2"
+            data-testid="accommodation-traveled-with-item"
+          >
+            <span
+              className="text-sm"
+              data-testid="accommodation-traveled-with-item-label"
+            >
               <span className="capitalize">{aspectKey}</span> (
               {(+aspectValue * 10).toFixed(0)}
               /100)

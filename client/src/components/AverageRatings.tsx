@@ -8,7 +8,10 @@ type Props = {
 
 export const AverageRatings: FC<Props> = ({ aspectsAvg }) => {
   return (
-    <div className="flex flex-col gap-4">
+    <div
+      className="flex flex-col gap-4"
+      data-testid="accommodation-average-ratings"
+    >
       <h2 className="text-2xl">The average ratings for this accommodation</h2>
       <div className="grid gap-4 grid-cols-2 md:grid-cols-3">
         {Object.entries(aspectsAvg).map(([aspectKey, aspectValue]) => (

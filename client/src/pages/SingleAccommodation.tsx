@@ -53,6 +53,7 @@ export const SingleAccommodation: FC = () => {
       abortController.signal
     )
       .then(setReviews)
+      .catch(() => setError(true))
       .finally(() => setLoading(false));
 
     return () => abortController.abort();
@@ -75,8 +76,13 @@ export const SingleAccommodation: FC = () => {
       ) : (
         <>
           <div className="flex justify-between items-center my-10">
-            <h1 className="text-4xl">{accommodation?.name}</h1>
-            <div className="relative h-20 w-20 flex items-center justify-center text-white">
+            <h1 className="text-4xl" data-testid="accommodation-title">
+              {accommodation?.name}
+            </h1>
+            <div
+              className="relative h-20 w-20 flex items-center justify-center text-white"
+              data-testid="accommodation-general-review-average"
+            >
               <HiStar className="-z-10 absolute inset-0 h-20 w-20 text-amber-500" />
               {averageReviews ? averageReviews.generalAvg : <Spinner />}
             </div>

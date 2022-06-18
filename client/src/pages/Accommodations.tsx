@@ -28,6 +28,7 @@ export const Accommodations: FC = () => {
             key={id}
             className="p-4 border-2 border-gray-300 rounded-lg hover:bg-gray-200 w-full"
             to={`/accommodations/${id}`}
+            data-testid="accommodation"
           >
             {name ?? nameFallback}
           </Link>

@@ -29,6 +29,7 @@ export const ReviewsFilters: FC<Props> = ({
         <select
           className="bg-white py-2 px-3 border rounded-lg capitalize lowercase"
           onChange={handleFilterByChange}
+          data-testid="accommodation-filter-by-input"
         >
           <option value="">All</option>
           {travelWithOptions.map((traveledWith) => (

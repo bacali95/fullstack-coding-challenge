@@ -25,11 +25,13 @@ export const Pagination: FC<Props> = ({ currentPage, totalPages, setPage }) => {
         Icon={HiOutlineChevronDoubleLeft}
         disabled={currentPage === 0}
         onClick={() => setPage(0)}
+        data-testid="pagination-first-page"
       />
       <PaginationItem
         Icon={HiOutlineChevronLeft}
         disabled={currentPage === 0}
         onClick={() => setPage(currentPage - 1)}
+        data-testid="pagination-previous-page"
       />
       {pages?.map((page, index) => (
         <PaginationItem
@@ -42,6 +44,7 @@ export const Pagination: FC<Props> = ({ currentPage, totalPages, setPage }) => {
           )}
           onClick={page === "DOTS" ? undefined : () => setPage(page - 1)}
           disabled={page === "DOTS"}
+          data-testid={page !== "DOTS" && `pagination-${page}-page`}
         >
           {page === "DOTS" ? <HiDotsHorizontal className="h-4 w-4" /> : page}
         </PaginationItem>
@@ -50,11 +53,13 @@ export const Pagination: FC<Props> = ({ currentPage, totalPages, setPage }) => {
         Icon={HiOutlineChevronRight}
         disabled={currentPage + 1 === totalPages}
         onClick={() => setPage(currentPage + 1)}
+        data-testid="pagination-next-page"
       />
       <PaginationItem
         Icon={HiOutlineChevronDoubleRight}
         disabled={currentPage + 1 === totalPages}
         onClick={() => setPage(totalPages - 1)}
+        data-testid="pagination-last-page"
       />
     </div>
   );
