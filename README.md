@@ -8,7 +8,7 @@
 2. Seed the data to the database using `yarn data-import:seed`,
 
 ### Run services from source
-1. Run `cd data-service && python main.py` to start the python data service,
+1. Run `cd data-service && pip install -r requirements.txt && python main.py` to start the python data service,
 2. In a separate terminal run `yarn start` to spin up both the NodeJs server and the ReactJs client dev server,
 3. Open `http://localhost:3000` in the browser.
 
